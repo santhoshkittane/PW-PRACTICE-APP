@@ -1,12 +1,13 @@
 import {test,expect} from '@playwright/test'
 
+
 test.beforeEach(async({page})=>{
     await page.goto('http://localhost:4200/')
     await page .getByTitle('Forms').click()
     await page.getByText('Form Layouts').click()
 })
 
-test('Locator Syntax Rules',async({page})=>{
+/*test('Locator Syntax Rules',async({page})=>{
     //by Tag Name
     await page.locator('input').first().click()
 
@@ -33,6 +34,7 @@ test('Locator Syntax Rules',async({page})=>{
 page.locator(':text-is("Using the Grid")')
 })
 
+
 test('user Facing Locators',async({page}) =>{
     await page.getByRole('textbox',{name:'Email'}).first().click()
     await page.getByRole('textbox',{name:'Email'}).nth(1).click()
@@ -49,29 +51,44 @@ test('user Facing Locators',async({page}) =>{
     }
 
 })
+    */
 
 test('Locating Child Elements',async({page})=>{
 
-    //await page.locator('nb-card nb-radio :text-is("Option 1")').click()
-    //await page.pause()
-    //await page.locator('nb-card nb-radio :text-is("Option 2")').click()
-    //await page.locator('input.native-input[type="radio"]').click({ force: true })
-    //await page.locator('nb-card nb-radio:has-text("Option 2")').click()
-    //await page.getByRole('radio', { name: 'Option 2' }).click()
-    await page.locator('nb-card').locator('nb-radio :text-is("Option 1")').click()
-    //above is not working and need to check the reason
-    //await page.locator('.text :text("Option 1")').first().click()
+//await page.locator('nb-card nb-radio :text-is("Option 1")').click()
+//await page.locator('nb-radio-group nb-radio :text-is("Option 1"):text-is("Option 1")').click()
+//await page.locator('nb-card').getByRole('button',{name:'Sign in'}).first().click()
+await page.locator('nb-card').getByRole('button',{name:'Sign in'}).nth(0).click()    
+})
 
-    //await page.getByRole('radio', { name: 'Option 2' }).check()
-    //await page.locator('nb-radio:has-text("Option 2")').locator('input.native-input').check()
-    //await page.locator('nb-radio:has-text("Option 2") label').click()
+test('Locating Parent Elements',async({page})=>{
+    await page.locator('nb-card', {hasText:"Using the Grid"}).getByRole('textbox',{name:'Email'}).click()
+    await page.locator('nb-card', {has: page.locator("#inputPassword2")}).getByRole('textbox',{name:'Password'}).click()
+    await page.locator('nb-card').filter({hasText:"Basic form"}).getByRole('textbox',{name:'Email'}).click()
 
-
-
-   /* const radio = page.getByRole('radio', { name: 'Option 2' })
-    await expect(radio).toBeVisible()
-    await radio.click()
-    */
-
+    await page.locator('nb-card nb-card-body').filter({has:page.locator('nb-checkbox')}).filter({hasText:'Sign in'})
+    .getByRole('textbox',{name:'Email'}).click()
+await page.waitForTimeout(3000);
+    await page.locator('nb-card nb-card-body').filter({has:page.locator('nb-checkbox')}).filter({hasText:'Sign in'})
+    .getByRole('textbox',{name:'Password'}).click()
+    // await page.locator('nb-card nb-card-body').filter({hasText:'Option 1'}).getByRole('radio',{name:'Option 1'}).click()
+    //await page.locator('Basic form').filter({hasText:"Check me out})"}).locator(".custom-checkbox").click()
+    //await page.getByLabel('Option 1').check()
+    //await page.locator('nb_card nb_card_body').filter({hasText:'Option 1'}).getByText('Option 1').click()
+    //await page.locator('label:has-text("Option 2")').click()
+    //await page.locator('label:has-text("Option 2")').click({force:true})
+    //await page.locator('label:has-text("Option 2") input[type="radio"]').check({ force: true })
+    await page.locator(':text-is("Using the Grid")').locator("..").getByRole('textbox',{name:'Password'}).click()
     
 })
+
+test('Reusing Locators',async({page}) => {
+    var basicForm= page.locator('nb-card').filter({hasText:"Basic form"});
+
+    await basicForm.getByRole('textbox',{name:'Email'}).fill('test@test.com')
+    await basicForm.getByRole('textbox',{name:'Password'}).fill('test@123')
+    await basicForm.getByRole('button').click()
+
+
+})
+
