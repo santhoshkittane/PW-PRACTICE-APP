@@ -87,7 +87,7 @@ test('Reusing Locators',async({page}) => {
 
     await basicForm.getByRole('textbox',{name:'Email'}).fill('test@test.com')
     await basicForm.getByRole('textbox',{name:'Password'}).fill('test@123')
-    await basicForm.getByRole('button').click()
+    await basicForm.getByRole('button').click();
 
 
 })
