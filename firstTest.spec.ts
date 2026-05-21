@@ -7,7 +7,7 @@ test.beforeEach(async({page})=>{
     await page.getByText('Form Layouts').click()
 })
 
-/*test('Locator Syntax Rules',async({page})=>{
+test('Locator Syntax Rules',async({page})=>{
     //by Tag Name
     await page.locator('input').first().click()
 
@@ -51,7 +51,7 @@ test('user Facing Locators',async({page}) =>{
     }
 
 })
-    */
+    
 
 test('Locating Child Elements',async({page})=>{
 
@@ -84,10 +84,15 @@ await page.waitForTimeout(3000);
 
 test('Reusing Locators',async({page}) => {
     var basicForm= page.locator('nb-card').filter({hasText:"Basic form"});
+    var emailField= basicForm.getByRole('textbox',{name:'Email'})
 
-    await basicForm.getByRole('textbox',{name:'Email'}).fill('test@test.com')
+    await emailField.fill('test@test.com')
     await basicForm.getByRole('textbox',{name:'Password'}).fill('test@123')
+    await basicForm.locator('nb-checkbox').click()
     await basicForm.getByRole('button').click();
+
+    await expect(emailField).toHaveValue('test@test.com')
+
 
 
 })
