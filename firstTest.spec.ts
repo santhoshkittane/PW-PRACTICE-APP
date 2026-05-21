@@ -1,3 +1,4 @@
+import { input } from '@angular/core'
 import {test,expect} from '@playwright/test'
 
 
@@ -93,7 +94,44 @@ test('Reusing Locators',async({page}) => {
 
     await expect(emailField).toHaveValue('test@test.com')
 
-
-
 })
+
+test('Extracting Values',async({page})=>{
+    var basicForm= page.locator('nb-card').filter({hasText:"Basic form"});
+    const buttonText = await basicForm.getByRole('button').textContent();
+    expect(buttonText).toBe('Submit');
+    console.log('The TEXT present: ' + buttonText);
+
+    //to check atleast 1 radio is option 1
+
+    const radioValues = await page.locator('nb-radio').allTextContents();
+    console.log('Radio values: ' + radioValues);
+    expect(radioValues).toContain('Option 1');
+    var emailField= basicForm.getByRole('textbox',{name:'Email'})
+    await emailField.fill('test@test.com')
+    const emailValue = await emailField.inputValue();
+    console.log('Email field value: ' + emailValue);
+    expect(emailValue).toBe('test@test.com')
+    // const EmailValue = emailField.getAttribute('placeholder').valueOf();
+    // console.log('Email field placeholder: ' + EmailValue);
+    // expect(EmailValue).toBe('Email')
+        //var passwordField= basicForm.getByRole('textbox',{name:'Password'})
+        var passwordField= await page.locator('nb-card', {has: page.locator("#exampleInputPassword1")}).getByRole('textbox',{name:'Password'}).getAttribute('placeholder');
+        console.log('PassWord placeholder: ' + passwordField);
+        var pwd1 = await basicForm.locator('#exampleInputPassword1').getAttribute('placeholder');
+        console.log('PassWord placeholder123: ' + pwd1);
+        //var passwordField1= await page.locator('#exampleInputPassword1').inputValue();  
+        //const passwordValue = await passwordField.allTextContents();
+        //var passwordValue = await passwordField.
+        //console.log('PassWord placeholder: ' + passwordValue);
+        //expect(passwordValue).toBe('Password');  
+        
+        var txtbox = await page.locator(':has-text("Remember me")').getByRole('textbox').first().getAttribute('placeholder');
+        console.log('First input field placeholder: ' + txtbox);
+        var txtbox2 = await page.locator(':has-text("Remember me")').getByRole('textbox').nth(1).getAttribute('placeholder');
+        console.log('Second input field placeholder: ' + txtbox2);
+
+
+}
+)
 
