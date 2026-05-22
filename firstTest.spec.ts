@@ -129,9 +129,29 @@ test('Extracting Values',async({page})=>{
         var txtbox = await page.locator(':has-text("Remember me")').getByRole('textbox').first().getAttribute('placeholder');
         console.log('First input field placeholder: ' + txtbox);
         var txtbox2 = await page.locator(':has-text("Remember me")').getByRole('textbox').nth(1).getAttribute('placeholder');
-        console.log('Second input field placeholder: ' + txtbox2);
+        console.log('Second input field placeholder: ' + txtbox2);        
 
 
-}
-)
+})
+
+       //Assertions
+test('Assertions',async({page})=>{
+
+    //General Assertions
+    const value = 5
+    expect(value).toEqual(5)
+
+    var basicFormButton = page.locator('nb-card').filter({hasText:"Basic form"}).locator('button')
+    const text = await basicFormButton.textContent();
+    expect(text).toEqual('Submit')
+
+    //Locator Assertions
+    await expect(basicFormButton).toHaveText('Submit')
+
+    //Soft Assertions
+    await expect.soft(basicFormButton).toHaveText('Submit1')
+    await basicFormButton.click()
+
+
+})
 
