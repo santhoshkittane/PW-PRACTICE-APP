@@ -7,7 +7,7 @@ import { test, expect, devices } from '@playwright/test'
 //     await page .getByTitle('Forms').click()
 //     await page.getByText('Form Layouts').click()
 // })
-    test.use({...devices['MI 11 Ultra']})
+    test.use({...devices['iphone 13 pro']})
 test('Mobile Device Emulation', async ({ page }) => {
     await page.goto('http://localhost:4200/')
     await page.waitForTimeout(20000)
